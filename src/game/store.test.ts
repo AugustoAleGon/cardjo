@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { availableTiles, gameStatus, legalPairs, SOLUTION } from './engine'
+import { availableTiles, createDeal, gameStatus, legalPairs } from './engine'
 import type { Pair, Tile } from './engine'
 import { createGameStore } from './store'
 import type { GameStore } from './store'
+
+const SOLUTION = createDeal(() => 0.5).solution
 
 function match(store: ReturnType<typeof createGameStore>, pair: Pair) {
   store.getState().selectTile(pair[0])

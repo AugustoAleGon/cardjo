@@ -14,7 +14,7 @@ export type GameStore = GameState & GameActions
 
 export function createGameStore(random: RandomSource = Math.random, deal?: readonly Tile[]) {
   return createStore<GameStore>()((set) => ({
-    ...initialState(deal ?? createDeal(random)),
+    ...initialState(deal ?? createDeal(random).tiles),
     selectTile: (id) => set((state) => selectTile(state, id)),
     hint: () => set(hint),
     undo: () => set(undo),

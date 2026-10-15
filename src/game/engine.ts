@@ -1,6 +1,7 @@
 export type Tile = Readonly<{ id: string; face: number; x: number; y: number; z: number }>
 export type Pair = readonly [string, string]
 export type RandomSource = () => number
+export type Deal = Readonly<{ tiles: readonly Tile[]; solution: readonly Pair[] }>
 export type GameState = Readonly<{
   startingDeal: readonly Tile[]
   removedIds: readonly string[]
@@ -24,24 +25,26 @@ export const LAYOUT: readonly Omit<Tile, 'face'>[] = [
   }),
 ]
 
-export const SOLUTION: readonly Pair[] = [
-  ...[0.5, 1.5, 2.5].flatMap((y) => [[1, 4], [2, 3]].map(
-    ([left, right]): Pair => [positionId(left, y, 1), positionId(right, y, 1)],
-  )),
-  ...[0, 1, 2, 3].flatMap((y) => [[0, 5], [1, 4], [2, 3]].map(
-    ([left, right]): Pair => [positionId(left, y, 0), positionId(right, y, 0)],
-  )),
-]
-
-export function createDeal(random: RandomSource = Math.random): readonly Tile[] {
+export function createDeal(random: RandomSource = Math.random): Deal {
+  let remaining = LAYOUT.map((position) => ({ ...position, face: 0 }))
+  const solution: Pair[] = []
+  while (remaining.length > 0) {
+    // Clear each layer before the next. This prevents a lone tile from covering the final tile.
+    const layer = Math.max(...remaining.map((tile) => tile.z))
+    const available = remaining.filter((tile) => tile.z === layer && isAvailable(tile, remaining))
+    const first = available.splice(Math.floor(random() * available.length), 1)[0]
+    const second = available[Math.floor(random() * available.length)]
+    solution.push([first.id, second.id])
+    remaining = remaining.filter((tile) => tile.id !== first.id && tile.id !== second.id)
+  }
   const faces = Array.from({ length: 18 }, (_, i) => i % 9)
   for (let i = faces.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1))
     ;[faces[i], faces[j]] = [faces[j], faces[i]]
   }
   const assigned = new Map<string, number>()
-  SOLUTION.forEach((pair, i) => pair.forEach((id) => assigned.set(id, faces[i])))
-  return LAYOUT.map((position) => ({ ...position, face: assigned.get(position.id)! }))
+  solution.forEach((pair, i) => pair.forEach((id) => assigned.set(id, faces[i])))
+  return { tiles: LAYOUT.map((position) => ({ ...position, face: assigned.get(position.id)! })), solution }
 }
 
 export function initialState(deal: readonly Tile[]): GameState {
@@ -123,7 +126,7 @@ export function hint(state: GameState): GameState {
 }
 
 export function nextDeal(previous: readonly Tile[], random: RandomSource): readonly Tile[] {
-  const deal = createDeal(random)
+  const deal = createDeal(random).tiles
   return deal.every((tile, i) => tile.face === previous[i]?.face)
     ? deal.map((tile) => ({ ...tile, face: (tile.face + 1) % 9 }))
     : deal

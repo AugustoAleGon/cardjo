@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { availableTiles, createDeal, gameStatus, initialState, isAvailable, LAYOUT, legalPairs, nextDeal, selectTile, SOLUTION } from './engine'
+import { availableTiles, createDeal, gameStatus, initialState, isAvailable, LAYOUT, legalPairs, nextDeal, selectTile } from './engine'
 import type { Tile } from './engine'
 
 function randomFromSeed(seed: number) {
@@ -13,7 +13,7 @@ const tile = (id: string, x: number, y: number, z = 0, face = 0): Tile => ({ id,
 
 describe('starting deals', () => {
   it('contains 36 unique positions and four copies of each face', () => {
-    const deal = createDeal(() => 0.5)
+    const deal = createDeal(() => 0.5).tiles
     expect(deal).toHaveLength(36)
     expect(new Set(deal.map((tile) => tile.id)).size).toBe(36)
     for (let face = 0; face < 9; face++) expect(deal.filter((tile) => tile.face === face)).toHaveLength(4)
@@ -21,8 +21,9 @@ describe('starting deals', () => {
   })
 
   it.each([0, 0.1, 0.5, 0.999999])('clears the known solution with random input %s', (value) => {
-    let state = initialState(createDeal(() => value))
-    for (const [first, second] of SOLUTION) {
+    const deal = createDeal(() => value)
+    let state = initialState(deal.tiles)
+    for (const [first, second] of deal.solution) {
       state = selectTile(selectTile(state, first), second)
     }
     expect(state.removedIds).toHaveLength(36)
@@ -31,7 +32,7 @@ describe('starting deals', () => {
   })
 
   it('blocks covered tiles and tiles with two occupied sides', () => {
-    const deal = createDeal(() => 0)
+    const deal = createDeal(() => 0).tiles
     expect(isAvailable(deal.find((tile) => tile.id === '0:0:1')!, deal)).toBe(false)
     expect(isAvailable(deal.find((tile) => tile.id === '1:0.5:2')!, deal)).toBe(false)
     expect(isAvailable(deal.find((tile) => tile.id === '1:0.5:1')!, deal)).toBe(true)
@@ -39,8 +40,9 @@ describe('starting deals', () => {
 
   it('replays the solution across 100 seeded deals', () => {
     for (let seed = 0; seed < 100; seed++) {
-      let state = initialState(createDeal(randomFromSeed(seed)))
-      for (const [first, second] of SOLUTION) {
+      const deal = createDeal(randomFromSeed(seed))
+      let state = initialState(deal.tiles)
+      for (const [first, second] of deal.solution) {
         const available = availableTiles(state).map((candidate) => candidate.id)
         expect(available).toContain(first)
         expect(available).toContain(second)
@@ -51,11 +53,12 @@ describe('starting deals', () => {
   })
 
   it('creates a different solvable deal even when the random source repeats', () => {
-    const first = createDeal(() => 0.5)
+    const generated = createDeal(() => 0.5)
+    const first = generated.tiles
     const second = nextDeal(first, () => 0.5)
     expect(second).not.toEqual(first)
     let state = initialState(second)
-    for (const [a, b] of SOLUTION) state = selectTile(selectTile(state, a), b)
+    for (const [a, b] of generated.solution) state = selectTile(selectTile(state, a), b)
     expect(gameStatus(state)).toBe('won')
   })
 })
@@ -120,9 +123,10 @@ describe('matching and status', () => {
   })
 
   it('keeps varied legal play consistent across generated deals', () => {
+    let sawDeadEnd = false
     for (let seed = 1; seed <= 100; seed++) {
       const random = randomFromSeed(seed)
-      let state = initialState(createDeal(random))
+      let state = initialState(createDeal(random).tiles)
       while (gameStatus(state) === 'playing') {
         const pairs = legalPairs(state)
         const [a, b] = pairs[Math.floor(random() * pairs.length)]
@@ -132,6 +136,8 @@ describe('matching and status', () => {
       expect(state.history.length).toBeLessThanOrEqual(18)
       expect(state.removedIds).toHaveLength(state.history.length * 2)
       expect(legalPairs(state)).toEqual([])
+      sawDeadEnd ||= gameStatus(state) === 'dead-end'
     }
+    expect(sawDeadEnd).toBe(true)
   })
 })
