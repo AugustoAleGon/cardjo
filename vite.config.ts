@@ -5,5 +5,5 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   base: '/cardjo/',
   plugins: [react(), tailwindcss()],
-  test: { include: ['src/**/*.test.ts'] },
+  test: { include: ['src/**/*.test.{ts,tsx}'] },
 })
