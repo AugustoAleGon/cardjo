@@ -17,7 +17,11 @@ Run these checks before a release:
 2. Run `pnpm lint:prose`.
 3. Run `pnpm test`.
 4. Run `pnpm build`.
+5. Run `pnpm test:browser`.
 
 Review advisory prose findings manually.
 Do not claim official dictionary compliance.
 Keep the copied skill unchanged.
+
+Use atomic commits with Conventional Commit messages.
+Keep each commit focused on one change.
