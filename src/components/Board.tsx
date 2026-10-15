@@ -45,7 +45,7 @@ export function Board({ recoveryRef }: { recoveryRef: RefObject<HTMLButtonElemen
           const hinted = hintPair?.includes(tile.id) ?? false
           const stateLabel = selected ? text.selectedLabel : hinted ? text.hinted : available ? text.available : text.blocked
           const label = text.tileLabel.replace('{face}', text.faces[tile.face])
-            .replace('{row}', String(tile.y + 1)).replace('{column}', String(tile.x + 1))
+            .replace('{row}', String(tile.y + (tile.z === 0 ? 1 : 0.5))).replace('{column}', String(tile.x + 1))
             .replace('{layer}', String(tile.z + 1)).replace('{state}', stateLabel)
           return <button
             key={tile.id}

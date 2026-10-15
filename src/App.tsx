@@ -6,7 +6,7 @@ import { gameStatus, legalPairs } from './game/engine'
 import { gameStore, useGame } from './game/useGame'
 import text from './messages.json'
 
-const controlClass = 'flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#d8d9ca] bg-[#fbfaf5] px-3 py-3 text-xs font-medium text-[#365344] transition-colors hover:border-[#81917a] hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#356648] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#d8d9ca] disabled:hover:bg-[#fbfaf5] sm:px-5 sm:text-sm'
+const controlClass = 'flex min-h-11 flex-col items-center justify-center gap-1 rounded-xl border border-[#d8d9ca] bg-[#fbfaf5] px-3 py-3 text-xs font-medium text-[#365344] transition-colors hover:border-[#81917a] hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#356648] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#d8d9ca] disabled:hover:bg-[#fbfaf5] sm:flex-row sm:gap-2 sm:px-5 sm:text-sm'
 
 export default function App() {
   const status = useGame(gameStatus)
@@ -56,7 +56,7 @@ export default function App() {
         <button type="button" disabled={!canHint} onClick={() => gameStore.getState().hint()} className={controlClass}><Icon name="hint" />{text.hint}</button>
         <button type="button" ref={canUndo ? recovery : undefined} disabled={!canUndo} onClick={() => gameStore.getState().undo()} className={controlClass}><Icon name="undo" />{text.undo}</button>
         <button type="button" onClick={() => reset('restart')} className={controlClass}><Icon name="restart" />{text.restart}</button>
-        <button type="button" ref={!canUndo ? recovery : undefined} onClick={() => reset('newGame')} className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-[#244e3e] bg-[#244e3e] px-2 py-3 text-xs font-medium text-[#faf5e8] transition-colors hover:bg-[#163d2e] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#356648] sm:gap-2 sm:px-5 sm:text-sm"><Icon name="plus" />{text.newGame}</button>
+        <button type="button" ref={!canUndo ? recovery : undefined} onClick={() => reset('newGame')} className="flex min-h-11 flex-col items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-[#244e3e] bg-[#244e3e] px-2 py-3 text-xs font-medium text-[#faf5e8] transition-colors hover:bg-[#163d2e] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#356648] sm:flex-row sm:gap-2 sm:px-5 sm:text-sm"><Icon name="plus" />{text.newGame}</button>
       </nav>
 
       <p className="mt-8 text-center text-[11px] tracking-wide text-[#6c7963] sm:mt-10">{text.footer}</p>
