@@ -4,6 +4,8 @@ A Mahjong Solitaire game with 36 tiles, two layers, and no clock.
 
 [Play the game](https://augustoalegon.github.io/cardjo/) · [View CI](https://github.com/AugustoAleGon/cardjo/actions)
 
+![The desktop game board](docs/screenshots/desktop.jpg)
+
 ## Setup
 
 Use Node 22.16.0, pnpm 10.12.1, and Python 3.13 or later.
@@ -24,6 +26,15 @@ Open <http://localhost:5173/cardjo/>.
 | `pnpm test` | Run the Vitest suite once. |
 | `pnpm build` | Check types and create the production build. |
 | `pnpm preview` | Serve the production build locally. |
+| `pnpm test:browser` | Check the production build in Chromium. |
+
+The browser check requires a production build and Playwright Chromium.
+
+```sh
+pnpm exec playwright install --with-deps chromium
+pnpm build
+pnpm test:browser
+```
 
 ## Rules
 
@@ -103,10 +114,11 @@ It also checks varied legal choices across 100 generated deals.
 The checks cover overlap, side blocking, face counts, invalid input, matching, atomic removal, hints, undo, resets, and store isolation.
 Interface tests cover reset confirmation, cancellation, victory, and dead-end recovery.
 Browser checks cover mouse input, keyboard focus, phone sizing, instructions, and complete games.
+The CI browser check also tests touch input, reset dialogs, reduced motion, and reload behavior.
 
 ## CI and hosting
 
-GitHub Actions runs lint, prose checks, tests, and the production build on pushes and pull requests.
+GitHub Actions runs lint, prose checks, tests, browser checks, and the production build on pushes and pull requests.
 Deployment requires all checks to pass.
 Only pushes to `main` deploy to GitHub Pages.
 CI installs dependencies with the committed lockfile.
@@ -137,7 +149,9 @@ It uses one fixed layout and original tile art.
 
 Implementation started at 21:37:50 UTC on October 15, 2026.
 The limit is 60 consecutive minutes, including installation and deployment waits.
+Implementation, checks, and deployment finished in less than 30 minutes.
 Planning and video recording are outside this period.
 
+See [release validation](docs/VALIDATION.md) for observations and screenshots.
 See [AI notes](docs/AI-NOTES.md) for decisions and corrections.
 See [the video outline](docs/VIDEO.md) for the recording checklist.
