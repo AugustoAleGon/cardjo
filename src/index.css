@@ -1,3 +1,54 @@
 @import "tailwindcss";
 
+:root {
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 body { margin: 0; min-width: 360px; }
+button { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled) { cursor: pointer; }
+
+.board-surface {
+  background-image: radial-gradient(ellipse at 50% 20%, #ffffff08, #061f1b24);
+}
+
+.board-surface::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid #e6d9ab24;
+  border-radius: 15px;
+  pointer-events: none;
+}
+
+.board-frame { width: min(100%, 520px); container-type: inline-size; }
+.board-geometry { position: relative; width: 100%; aspect-ratio: 6.4 / 5.1; }
+
+.mahjong-tile {
+  left: calc((var(--x) + 0.15 + var(--z) * 0.055) * var(--board-scale));
+  top: calc((var(--y) * 1.18 + 0.25 - var(--z) * 0.09) * var(--board-scale));
+  width: calc(var(--board-scale) * 0.96);
+  height: calc(var(--board-scale) * 1.14);
+  box-shadow: 0 3px 0 #cbbd98, 1px 6px 0 #a99b79, 2px 9px 7px #041f1b55, inset 0 1px 0 #fffdf6;
+  touch-action: manipulation;
+}
+
+.mahjong-tile:disabled { filter: brightness(0.85) saturate(0.7); }
+.mahjong-tile:not(:disabled):hover { filter: brightness(1.06); }
+.mahjong-tile[data-selected="true"] {
+  background-color: #fff3c6;
+  border-color: #e6bd57;
+  box-shadow: 0 0 0 3px #e6bd57, 0 3px 0 #cbbd98, 1px 6px 0 #a99b79, 2px 9px 7px #041f1b55;
+}
+.mahjong-tile[data-hinted="true"] {
+  outline: 3px dashed #f0d78b;
+  outline-offset: 3px;
+}
+.mahjong-tile:focus-visible { outline-style: solid; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; scroll-behavior: auto !important; }
+}
