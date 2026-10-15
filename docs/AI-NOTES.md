@@ -35,4 +35,3 @@ Tests and browser play reached dead ends with the revised generator.
 Automated checks do not replace browser inspection.
 Browser checks do not cover every browser or assistive technology.
 The prose linter does not prove official ASD dictionary compliance.
-The video requires a separate recording after implementation.

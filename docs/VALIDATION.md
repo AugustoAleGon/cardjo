@@ -55,9 +55,3 @@ The source commit appears in the README.
 [Desktop preview](screenshots/desktop.jpg)
 
 [Phone preview](screenshots/phone.jpg)
-
-## Remaining delivery work
-
-Record a video between two and four minutes long after implementation.
-Use the outline in `VIDEO.md`.
-The video is outside the implementation period.

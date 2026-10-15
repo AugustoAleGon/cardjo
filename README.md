@@ -2,7 +2,7 @@
 
 A Mahjong Solitaire game with 36 tiles, two layers, and no clock.
 
-[Play the game](https://augustoalegon.github.io/cardjo/) · [View CI](https://github.com/AugustoAleGon/cardjo/actions)
+[Play the game](https://augustoalegon.github.io/cardjo/) · [Watch the video](https://www.loom.com/share/707e807a20ee4f73a3b5e740ffefb772) · [View CI](https://github.com/AugustoAleGon/cardjo/actions)
 
 ![The desktop game board](docs/screenshots/desktop.jpg)
 
@@ -154,4 +154,3 @@ Planning and video recording are outside this period.
 
 See [release validation](docs/VALIDATION.md) for observations and screenshots.
 See [AI notes](docs/AI-NOTES.md) for decisions and corrections.
-See [the video outline](docs/VIDEO.md) for the recording checklist.
