@@ -7,6 +7,7 @@
   "controlsLabel": "Game controls",
   "remainingLabel": "Tiles remaining",
   "pairsLabel": "Pairs available",
+  "pairLabel": "Pair available",
   "hint": "Hint",
   "undo": "Undo",
   "restart": "Restart",

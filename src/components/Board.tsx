@@ -34,7 +34,7 @@ export function Board({ recoveryRef }: { recoveryRef: RefObject<HTMLButtonElemen
       </div>
       <div className="flex items-center gap-2 rounded-full border border-white/15 px-3 py-2 text-[11px] text-[#dce6d8] sm:text-xs">
         <span className="size-1.5 rounded-full bg-[#d9bd79]" aria-hidden="true" />
-        <span>{pairCount} {text.pairsLabel.toLowerCase()}</span>
+        <span>{pairCount} {(pairCount === 1 ? text.pairLabel : text.pairsLabel).toLowerCase()}</span>
       </div>
     </div>
     <div className="board-frame relative z-10 mx-auto">
